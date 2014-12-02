@@ -8,55 +8,6 @@ import java.io.*;
 	Add functionality to the color labels
 	Add functionality to save and reset buttons
 */
-
-class ColorWindow extends JComponent
-{
-	public void paint(Graphics g)
-	{
-		Dimension d = getSize();
-
-		//TODO: Set color correctinly
-		g.setColor(Color.red);
-		g.fillRect(1, 1, d.width-2, d.height-2);
-	}
-}
-
-class ColorLabel extends JPanel
-{
-	private JLabel colorName;
-	public JTextField colorTF;
-	private JButton minusButton;
-	private JButton plusButton;
-
-	public ColorLabel(String cName)
-	{
-		//create private data members
-		colorName = new JLabel(cName);
-		colorTF = new JTextField("");
-		minusButton = new JButton("-");
-		plusButton = new JButton("+");
-
-		LayoutItems();
-		setVisible(true);
-	}
-
-	private void LayoutItems()
-	{
-		setLayout(null);
-		add(colorName);
-		add(colorTF);
-		add(minusButton);
-		add(plusButton);
-
-		colorName.setBounds(0, 0, 45, 30);
-		colorTF.setBounds(47, 0, 60, 30);
-		minusButton.setBounds(109, 0, 60, 30);
-		plusButton.setBounds(169, 0, 60, 30);
-	}
-
-	//TODO: ADD LISTENERS
-}
-
 public class ColorSampler extends JFrame
 {
 	protected ColorWindow drawTest;
@@ -66,7 +17,12 @@ public class ColorSampler extends JFrame
 	protected JButton saveButton;
 	protected JButton resetButton;
 	protected JList colorList;
-
+	protected ColorObject[] colorArray;
+	protected String[] colors;
+	protected int currentColorIndex;
+	protected int currentRed;
+	protected int currentGreen;
+	protected int currentBlue;
 	public static void main(String argv[]) throws IOException
 	{
 		new ColorSampler("Color Sampler");
@@ -84,15 +40,16 @@ public class ColorSampler extends JFrame
 		blueLabel = new ColorLabel("Blue:");
 		saveButton = new JButton("Save");
 		resetButton = new JButton("Reset");
-		ColorObject[] colorArray = new ColorObject[11];
-		String colors[] = new String [11];
 		colorList = new JList();
+		colorArray = new ColorObject[11];
+		colors = new String [11];
+		currentColorIndex = 0;
 
 		//TODO: ADD LISTENERS
 
 
 		//Set up file i/o and put it in the list
-		setUpList(colorArray, colors);
+		setUpList();
 
 		//Add items to the window
 		addItemsToWindow();
@@ -101,14 +58,17 @@ public class ColorSampler extends JFrame
 		manualLayout();
 
 		//Load initial data
-		redLabel.colorTF.setText( String.valueOf(colorArray[0].red()));
-		greenLabel.colorTF.setText( String.valueOf(colorArray[0].green()));
-		blueLabel.colorTF.setText( String.valueOf(colorArray[0].blue()));
+		currentRed = colorArray[currentColorIndex].red();
+		currentGreen = colorArray[currentColorIndex].green();
+		currentBlue = colorArray[currentColorIndex].blue();
+		redLabel.colorTF.setText( String.valueOf(currentRed));
+		greenLabel.colorTF.setText( String.valueOf(currentGreen));
+		blueLabel.colorTF.setText( String.valueOf(currentBlue));
 
 		setVisible(true);
 	}
 
-	private void setUpList(ColorObject[] colorArray, String[] colors) throws IOException
+	private void setUpList() throws IOException
 	{
 		readColorsFromFile(colorArray);
 		setList(colorArray, colors);
@@ -171,6 +131,112 @@ public class ColorSampler extends JFrame
 		colorList.setBounds(250, 10, 115, 275);
 	}
 
+	private class ColorLabel extends JPanel
+	{	
+		private JLabel colorName;
+		public JTextField colorTF;
+		private JButton minusButton;
+		private JButton plusButton;
+
+		public ColorLabel(String cName)
+		{
+			//create private data members
+			colorName = new JLabel(cName);
+			colorTF = new JTextField("");
+			minusButton = new JButton("-");
+			plusButton = new JButton("+");
+
+			plusButton.addActionListener(new ActionHandler());
+			minusButton.addActionListener(new ActionHandler());
+
+			LayoutItems();
+			setVisible(true);
+		}
+
+		private void LayoutItems()
+		{
+			setLayout(null);
+			add(colorName);
+			add(colorTF);
+			add(minusButton);
+			add(plusButton);
+
+			colorName.setBounds(0, 0, 45, 30);
+			colorTF.setBounds(47, 0, 60, 30);
+			minusButton.setBounds(109, 0, 60, 30);
+			plusButton.setBounds(169, 0, 60, 30);
+		}
+
+		private class ActionHandler implements ActionListener
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				if(e.getSource() == plusButton)
+				{
+					if(colorName.getText() == "Red:" && currentRed <= 255)
+					{
+						currentRed += 5;
+						colorTF.setText(String.valueOf(currentRed));
+						//TODO: UPDATE COLOR
+					}
+
+					else if(colorName.getText() == "Green:" && currentGreen <= 255)
+					{
+						currentGreen += 5;
+						colorTF.setText(String.valueOf(currentGreen));
+						//TODO: UPDATE COLOR
+					}
+
+					else if(colorName.getText() == "Blue:" && currentBlue <= 255)
+					{
+						currentBlue += 5;
+						colorTF.setText(String.valueOf(currentBlue));
+						//TODO: UPDATE COLOR
+					}
+				}
+
+				if(e.getSource() == minusButton)
+				{
+					if(colorName.getText() == "Red:" && currentRed > 0)
+					{
+						currentRed -= 5;
+						colorTF.setText(String.valueOf(currentRed));
+						//TODO: UPDATE COLOR
+					}
+
+					else if(colorName.getText() == "Green:" && currentGreen > 0)
+					{
+						currentGreen -= 5;
+						colorTF.setText(String.valueOf(currentGreen));
+						//TODO: UPDATE COLOR
+					}
+
+					else if(colorName.getText() == "Blue:" && currentBlue > 0)
+					{
+						currentBlue -= 5;
+						colorTF.setText(String.valueOf(currentBlue));
+						//TODO: UPDATE COLOR
+					}
+				}
+
+			}
+		}
+	}
+
+
+	private class ColorWindow extends JComponent
+	{
+		public void paint(Graphics g)
+		{
+			Dimension d = getSize();
+
+			//TODO: Set color correctly
+			g.setColor(Color.red);
+			g.fillRect(1, 1, d.width-2, d.height-2);
+		}
+	}
+
+
 	public class ColorObject
 	{
 		private String name;
@@ -205,6 +271,14 @@ public class ColorSampler extends JFrame
 		private int blue()
 		{
 			return blue;
+		}
+	}
+
+	private class ActionHandler implements ActionListener
+	{
+		public void actionPerformed(ActionEvent e)
+		{
+
 		}
 	}
 

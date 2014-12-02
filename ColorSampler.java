@@ -16,7 +16,7 @@ class ColorWindow extends JComponent
 		Dimension d = getSize();
 
 		//TODO: Set color correctinly
-		g.setColor(Color.yellow);
+		g.setColor(Color.red);
 		g.fillRect(1, 1, d.width-2, d.height-2);
 	}
 }
@@ -24,7 +24,7 @@ class ColorWindow extends JComponent
 class ColorLabel extends JPanel
 {
 	private JLabel colorName;
-	private JTextField colorTF;
+	public JTextField colorTF;
 	private JButton minusButton;
 	private JButton plusButton;
 
@@ -99,6 +99,11 @@ public class ColorSampler extends JFrame
 
 		//Lay out items (manually)
 		manualLayout();
+
+		//Load initial data
+		redLabel.colorTF.setText( String.valueOf(colorArray[0].red()));
+		greenLabel.colorTF.setText( String.valueOf(colorArray[0].green()));
+		blueLabel.colorTF.setText( String.valueOf(colorArray[0].blue()));
 
 		setVisible(true);
 	}
@@ -185,6 +190,21 @@ public class ColorSampler extends JFrame
 		private String name()
 		{
 			return name;
+		}
+
+		private int red()
+		{
+			return red;
+		}
+
+		private int green()
+		{
+			return green;
+		}
+
+		private int blue()
+		{
+			return blue;
 		}
 	}
 

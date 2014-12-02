@@ -86,14 +86,11 @@ public class ColorSampler extends JFrame
 		saveButton = new JButton("Save");
 		resetButton = new JButton("Reset");
 		ColorObject[] colorArray = new ColorObject[11];
+		String colors[] = new String [11];
 		colorList = new JList();
 
 		//TODO: ADD LISTENERS
-
-		//TODO: USE FILE I/O INSTEAD OF HARDCODE
-		String colors[] = new String [11];
-		  // = {"Red", "Green", "Blue", "Yellow", "Cyan", "Magenta",
-			 // 				"Orange", "Pink", "Grey", "Black", "White"};
+		
 
 		//Set up file i/o and put it in the list
 		readColorsFromFile(colorArray);
@@ -151,7 +148,7 @@ public class ColorSampler extends JFrame
 	{
 		for(int i = 0; i < 11; i++)
 		{
-			destArray[i] = srcArray[i].cName();
+			destArray[i] = srcArray[i].name();
 		}
 	}
 
@@ -171,32 +168,9 @@ public class ColorSampler extends JFrame
 			blue = cBlue;	
 		}
 
-		public void setUpColor(String cName, int cRed, int cGreen, int cBlue)
-		{
-			name = cName;
-			red = cRed;
-			green = cGreen;
-			blue = cBlue;
-		}
-
-		public String cName()
+		private String name()
 		{
 			return name;
-		}
-
-		public int cRed()
-		{
-			return red;
-		}
-
-		public int cGreen()
-		{
-			return green;
-		}
-
-		public int cBlue()
-		{
-			return blue;
 		}
 	}
 

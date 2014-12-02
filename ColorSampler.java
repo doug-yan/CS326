@@ -90,7 +90,6 @@ public class ColorSampler extends JFrame
 		colorList = new JList();
 
 		//TODO: ADD LISTENERS
-		
 
 		//Set up file i/o and put it in the list
 		readColorsFromFile(colorArray);

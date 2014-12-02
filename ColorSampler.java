@@ -23,6 +23,8 @@ public class ColorSampler extends JFrame
 	protected int currentRed;
 	protected int currentGreen;
 	protected int currentBlue;
+	protected Color currentColor;
+
 	public static void main(String argv[]) throws IOException
 	{
 		new ColorSampler("Color Sampler");
@@ -32,7 +34,6 @@ public class ColorSampler extends JFrame
 	{
 		super(title);
 		setBounds(100, 100, 375, 325);
-		addWindowListener(new WindowDestroyer());
 
 		drawTest = new ColorWindow();
 		redLabel = new ColorLabel("Red:");
@@ -46,7 +47,7 @@ public class ColorSampler extends JFrame
 		currentColorIndex = 0;
 
 		//TODO: ADD LISTENERS
-
+		addWindowListener(new WindowDestroyer());
 
 		//Set up file i/o and put it in the list
 		setUpList();
@@ -64,6 +65,7 @@ public class ColorSampler extends JFrame
 		redLabel.colorTF.setText( String.valueOf(currentRed));
 		greenLabel.colorTF.setText( String.valueOf(currentGreen));
 		blueLabel.colorTF.setText( String.valueOf(currentBlue));
+		currentColor = new Color(currentRed, currentGreen, currentBlue);
 
 		setVisible(true);
 	}
@@ -131,6 +133,19 @@ public class ColorSampler extends JFrame
 		colorList.setBounds(250, 10, 115, 275);
 	}
 
+	private void updateColor()
+	{
+		currentColor = new Color(currentRed, currentGreen, currentBlue, 1);
+	}
+
+	private void updatePaint()
+	{
+		drawTest = new ColorWindow();
+		getContentPane().add(drawTest);
+		drawTest.setBounds(10, 10, 225, 125);
+		setVisible(true);
+	}
+
 	private class ColorLabel extends JPanel
 	{	
 		private JLabel colorName;
@@ -173,26 +188,27 @@ public class ColorSampler extends JFrame
 			{
 				if(e.getSource() == plusButton)
 				{
-					if(colorName.getText() == "Red:" && currentRed <= 255)
+					if(colorName.getText() == "Red:" && currentRed < 255)
 					{
 						currentRed += 5;
 						colorTF.setText(String.valueOf(currentRed));
-						//TODO: UPDATE COLOR
 					}
 
-					else if(colorName.getText() == "Green:" && currentGreen <= 255)
+					else if(colorName.getText() == "Green:" && currentGreen < 255)
 					{
 						currentGreen += 5;
 						colorTF.setText(String.valueOf(currentGreen));
-						//TODO: UPDATE COLOR
 					}
 
-					else if(colorName.getText() == "Blue:" && currentBlue <= 255)
+					else if(colorName.getText() == "Blue:" && currentBlue < 255)
 					{
 						currentBlue += 5;
 						colorTF.setText(String.valueOf(currentBlue));
-						//TODO: UPDATE COLOR
 					}
+					System.out.println(currentColor);
+					updateColor();
+					//drawTest.repaint(10, 10, 225, 125);
+					updatePaint();
 				}
 
 				if(e.getSource() == minusButton)
@@ -201,24 +217,23 @@ public class ColorSampler extends JFrame
 					{
 						currentRed -= 5;
 						colorTF.setText(String.valueOf(currentRed));
-						//TODO: UPDATE COLOR
 					}
 
 					else if(colorName.getText() == "Green:" && currentGreen > 0)
 					{
 						currentGreen -= 5;
 						colorTF.setText(String.valueOf(currentGreen));
-						//TODO: UPDATE COLOR
 					}
 
 					else if(colorName.getText() == "Blue:" && currentBlue > 0)
 					{
 						currentBlue -= 5;
 						colorTF.setText(String.valueOf(currentBlue));
-						//TODO: UPDATE COLOR
 					}
+					System.out.println(currentColor);
+					updateColor();
+					updatePaint();
 				}
-
 			}
 		}
 	}
@@ -229,9 +244,7 @@ public class ColorSampler extends JFrame
 		public void paint(Graphics g)
 		{
 			Dimension d = getSize();
-
-			//TODO: Set color correctly
-			g.setColor(Color.red);
+			g.setColor(currentColor);
 			g.fillRect(1, 1, d.width-2, d.height-2);
 		}
 	}

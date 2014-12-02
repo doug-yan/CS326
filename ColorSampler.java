@@ -5,7 +5,6 @@ import java.io.*;
 
 /*
 	TODO:
-	Read in to information from the file
 	Add functionality to the color labels
 	Add functionality to save and reset buttons
 */
@@ -91,31 +90,24 @@ public class ColorSampler extends JFrame
 
 		//TODO: ADD LISTENERS
 
+
 		//Set up file i/o and put it in the list
+		setUpList(colorArray, colors);
+
+		//Add items to the window
+		addItemsToWindow();
+
+		//Lay out items (manually)
+		manualLayout();
+
+		setVisible(true);
+	}
+
+	private void setUpList(ColorObject[] colorArray, String[] colors) throws IOException
+	{
 		readColorsFromFile(colorArray);
 		setList(colorArray, colors);
 		colorList.setListData(colors);
-
-		//Add items to the window
-		getContentPane().add(drawTest);
-		getContentPane().add(redLabel);
-		getContentPane().add(greenLabel);
-		getContentPane().add(blueLabel);
-		getContentPane().add(saveButton);
-		getContentPane().add(resetButton);
-		getContentPane().add(colorList);
-
-		//Lay out items (manually)
-		getContentPane().setLayout(null);
-		drawTest.setBounds(10, 10, 225, 125);
-		redLabel.setBounds(10, 145, 225, 30);
-		greenLabel.setBounds(10, 180, 225, 30);
-		blueLabel.setBounds(10, 215, 225, 30);
-		saveButton.setBounds(57, 250, 60, 30);
-		resetButton.setBounds(147, 250, 60, 30);
-		colorList.setBounds(250, 10, 115, 275);
-
-		setVisible(true);
 	}
 
 	private void readColorsFromFile(ColorObject[] colorArray) throws IOException
@@ -149,6 +141,29 @@ public class ColorSampler extends JFrame
 		{
 			destArray[i] = srcArray[i].name();
 		}
+	}
+
+	private void addItemsToWindow()
+	{
+		getContentPane().add(drawTest);
+		getContentPane().add(redLabel);
+		getContentPane().add(greenLabel);
+		getContentPane().add(blueLabel);
+		getContentPane().add(saveButton);
+		getContentPane().add(resetButton);
+		getContentPane().add(colorList);
+	}
+
+	private void manualLayout()
+	{
+		getContentPane().setLayout(null);
+		drawTest.setBounds(10, 10, 225, 125);
+		redLabel.setBounds(10, 145, 225, 30);
+		greenLabel.setBounds(10, 180, 225, 30);
+		blueLabel.setBounds(10, 215, 225, 30);
+		saveButton.setBounds(57, 250, 60, 30);
+		resetButton.setBounds(147, 250, 60, 30);
+		colorList.setBounds(250, 10, 115, 275);
 	}
 
 	public class ColorObject

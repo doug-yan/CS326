@@ -160,7 +160,29 @@ public class ColorSampler extends JFrame
 
 	private void writeToFile()
 	{
-		
+		try
+		{
+			FileOutputStream ostream = new FileOutputStream("colors.txt"); //this makes me nervous
+			PrintWriter writer = new PrintWriter(ostream);			//why would we output to the same file?
+			String color;
+			int red, green, blue;
+
+			for (int i = 0; i < 11; i++) 
+			{
+				color = colorArray[i].name;
+				red = colorArray[i].red;
+				green = colorArray[i].green;
+				blue = colorArray[i].blue;
+				writer.println(color + " " + red + " " + green + " " + blue + "\n");
+			}
+			writer.flush();
+			ostream.close();
+		}
+
+		catch (IOException e)
+		{
+			System.out.println("Something");
+		}
 	}
 
 	private class ColorLabel extends JPanel

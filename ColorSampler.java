@@ -21,9 +21,9 @@ public class ColorSampler extends JFrame
 	protected ColorObject[] colorArray;
 	protected String[] colors;
 	protected int currentColorIndex;
-	protected int currentRed;
-	protected int currentGreen;
-	protected int currentBlue;
+	protected int currentRed = 0;
+	protected int currentGreen = 0;
+	protected int currentBlue = 0;
 	protected Color currentColor;
 
 	public static void main(String argv[]) throws IOException
@@ -49,6 +49,7 @@ public class ColorSampler extends JFrame
 
 		//TODO: ADD LISTENERS
 		addWindowListener(new WindowDestroyer());
+		saveButton.addActionListener(new ActionHandler());
 		colorList.addListSelectionListener(new ListHandler());
 
 		//Set up file i/o and put it in the list
@@ -137,15 +138,9 @@ public class ColorSampler extends JFrame
 
 	private void updateColor()
 	{
-		currentColor = new Color(currentRed, currentGreen, currentBlue, 1);
-	}
-
-	private void updatePaint()
-	{
-		drawTest = new ColorWindow();
-		getContentPane().add(drawTest);
-		drawTest.setBounds(10, 10, 225, 125);
-		setVisible(true);
+		currentColor = new Color(currentRed, currentGreen, currentBlue);
+		System.out.println(currentRed + " " + currentGreen + " " + currentBlue);
+		drawTest.repaint();
 	}
 
 	private void updateRGBValues()
@@ -154,6 +149,9 @@ public class ColorSampler extends JFrame
 		redLabel.colorTF.setText(String.valueOf(c.red));
 		greenLabel.colorTF.setText(String.valueOf(c.green));
 		blueLabel.colorTF.setText(String.valueOf(c.blue));
+		currentRed = c.red;
+		currentGreen = c.green;
+		currentBlue = c.blue;
 		currentColor = new Color(c.red, c.green, c.blue);
 		drawTest.repaint();
 	}
@@ -217,10 +215,7 @@ public class ColorSampler extends JFrame
 						currentBlue += 5;
 						colorTF.setText(String.valueOf(currentBlue));
 					}
-					System.out.println(currentColor);
 					updateColor();
-					//drawTest.repaint(10, 10, 225, 125);
-					updatePaint();
 				}
 
 				if(e.getSource() == minusButton)
@@ -242,9 +237,7 @@ public class ColorSampler extends JFrame
 						currentBlue -= 5;
 						colorTF.setText(String.valueOf(currentBlue));
 					}
-					System.out.println(currentColor);
 					updateColor();
-					updatePaint();
 				}
 			}
 		}
@@ -303,7 +296,16 @@ public class ColorSampler extends JFrame
 	{
 		public void actionPerformed(ActionEvent e)
 		{
+			if(e.getSource() == resetButton)
+			{
+				// setUpList();
+				// current
+			}
 
+			if(e.getSource() == saveButton )
+			{
+
+			}
 		}
 	}
 

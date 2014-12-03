@@ -1,13 +1,17 @@
+//************************/
+//	Author: Douglas Yan
+//	Date Created: December 1, 2014
+//	Class: CS326
+//	Instructor: Dr. Mircea Nicolescu
+//*************************/
+
+
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
 import javax.swing.event.*;
 import java.io.*;
 
-/*
-	TODO:
-	Bug in reset button
-*/
 public class ColorSampler extends JFrame
 {
 	protected ColorWindow drawTest;
@@ -17,8 +21,8 @@ public class ColorSampler extends JFrame
 	protected JButton saveButton;
 	protected JButton resetButton;
 	protected JList colorList;
-	protected ColorObject[] colorArray = new ColorObject[11];
-	protected ColorObject[] resetArray = new ColorObject[11];
+	protected ColorObject[] colorArray;
+	protected ColorObject[] resetArray;
 	protected String[] colors;
 	protected int currentColorIndex;
 	protected int currentRed = 0;
@@ -31,11 +35,18 @@ public class ColorSampler extends JFrame
 		new ColorSampler("Color Sampler");
 	}
 
+	///////////////////////
+	///				    /// 
+	///     Methods     ///
+	///				 	///
+	///////////////////////
+
 	public ColorSampler(String title) throws IOException
 	{
 		super(title);
 		setBounds(100, 100, 375, 325);
 
+		//Instantiate the objects
 		drawTest = new ColorWindow();
 		redLabel = new ColorLabel("Red:");
 		greenLabel = new ColorLabel("Green:");
@@ -44,8 +55,11 @@ public class ColorSampler extends JFrame
 		resetButton = new JButton("Reset");
 		colorList = new JList();
 		colors = new String [11];
+		colorArray = new ColorObject[11];
+		resetArray = new ColorObject[11];
 		currentColorIndex = 0;
 
+		//Add listeners
 		addWindowListener(new WindowDestroyer());
 		saveButton.addActionListener(new ActionHandler());
 		resetButton.addActionListener(new ActionHandler());
@@ -72,14 +86,26 @@ public class ColorSampler extends JFrame
 		setVisible(true);
 	}
 
+	/*
+		Call readColorsFromFile(); which will load in the objects from the file.
+		Call setList(); which will write the names of the colors into an array.
+		Finally, set the data inside the colorList data structure.
+	*/
 	private void setUpList() throws IOException
 	{
-		readColorsFromFile(colorArray);
-		setList(colorArray, colors);
+		readColorsFromFile();
+		setList();
 		colorList.setListData(colors);
 	}
 
-	private void readColorsFromFile(ColorObject[] colorArray) throws IOException
+	/*
+		Read in from the file.
+		After reading in all the data for one color, call the parameterized constructor
+			for the ColorObject item.
+		The data goes into the colorArray, which is going to be used throughout the program.
+		The data also goes into resetArray, which will be used for resetting the values.
+	*/
+	private void readColorsFromFile() throws IOException
 	{
 		FileInputStream  stream = new FileInputStream("colors.txt");
 		InputStreamReader reader = new InputStreamReader(stream);
@@ -103,14 +129,13 @@ public class ColorSampler extends JFrame
 			counter = counter+1;
 		}
 		stream.close();
-
 	}
 
-	private void setList(ColorObject[] srcArray, String[] destArray)
+	private void setList()
 	{
 		for(int i = 0; i < 11; i++)
 		{
-			destArray[i] = srcArray[i].name();
+			colors[i] = colorArray[i].name();
 		}
 	}
 
@@ -139,11 +164,16 @@ public class ColorSampler extends JFrame
 
 	private void updateColor()
 	{
-		currentColor = new Color(currentRed, currentGreen, currentBlue, 1);
 		currentColor = new Color(currentRed, currentGreen, currentBlue);
 		drawTest.repaint();
 	}
 
+	/*
+		This method is used to update the values of the red, green, and blue labels
+			for the color every time the user clicks something in the list.
+		The current values for red, green, and blue are also updated and the color
+			panel is also updated.
+	*/
 	private void updateRGBValues()
 	{
 		ColorObject c = colorArray[currentColorIndex];
@@ -157,6 +187,12 @@ public class ColorSampler extends JFrame
 		drawTest.repaint();
 	}
 
+	/*
+		Using I/O requires that the method throw an IOException, except this method would
+			have been called from windowClosing(WindowEvent e);, which cannot throw an
+			IOException because it's an overridden method. Therefore, I had to catch an
+			IOException instead in the body.
+	*/
 	private void writeToFile()
 	{
 		try
@@ -180,10 +216,20 @@ public class ColorSampler extends JFrame
 
 		catch (IOException e)
 		{
-			System.out.println("Something");
+			System.out.println("Error writing to file.");
 		}
 	}
 
+	///////////////////////
+	///				    /// 
+	///     Classes     ///
+	///				 	///
+	///////////////////////
+
+	/*
+		This class contains the name of the color component, the text field that
+			holds the value of that component, the plus button, and the minus button.
+	*/
 	private class ColorLabel extends JPanel
 	{	
 		private JLabel colorName;
@@ -193,12 +239,13 @@ public class ColorSampler extends JFrame
 
 		public ColorLabel(String cName)
 		{
-			//create private data members
+			//Create private data members
 			colorName = new JLabel(cName);
 			colorTF = new JTextField("");
 			minusButton = new JButton("-");
 			plusButton = new JButton("+");
 
+			//Add listeners
 			plusButton.addActionListener(new ActionHandler());
 			minusButton.addActionListener(new ActionHandler());
 
@@ -222,6 +269,11 @@ public class ColorSampler extends JFrame
 
 		private class ActionHandler implements ActionListener
 		{
+			/*
+				If a plus button is pressed, it increases the component value.
+				If a minus button is pressed, it decreases the componenet value.
+				For both buttons, the color is updated and paint panel updated.
+			*/
 			public void actionPerformed(ActionEvent e)
 			{
 				if(e.getSource() == plusButton)
@@ -276,7 +328,7 @@ public class ColorSampler extends JFrame
 		}
 	}
 
-
+	//From notes
 	private class ColorWindow extends JComponent
 	{
 		public void paint(Graphics g)
@@ -287,14 +339,17 @@ public class ColorSampler extends JFrame
 		}
 	}
 
-
-	public class ColorObject
+	/*
+		The color object holds the name of the color and the red, green, and blue 
+			components that make up the color.
+		There are setters and getters written for each data member.
+	*/
+	private class ColorObject
 	{
 		private String name;
 		private int red;
 		private int green;
 		private int blue;
-
 
 		public ColorObject(String cName, int cRed, int cGreen, int cBlue)
 		{
@@ -345,12 +400,16 @@ public class ColorSampler extends JFrame
 		}
 	}
 
+	/*
+		The ActionHandler will detect when the save and reset buttons are pressed.
+	*/
 	private class ActionHandler implements ActionListener
 	{
 		public void actionPerformed(ActionEvent e)
 		{
 			if(e.getSource() == resetButton)
 			{
+				//Reset all the values of colorArray using resetArray
 				for(int i = 0; i < 11; i++)
 				{
 					colorArray[i].setName(resetArray[i].name);
@@ -358,6 +417,8 @@ public class ColorSampler extends JFrame
 					colorArray[i].setGreen(resetArray[i].green);
 					colorArray[i].setBlue(resetArray[i].blue);
 				}
+
+				//Crude hardcode to reset the value of the color label
 				setTitle("Color Sampler");
 				currentRed = colorArray[currentColorIndex].red;
 				currentGreen = colorArray[currentColorIndex].green;
@@ -370,6 +431,7 @@ public class ColorSampler extends JFrame
 
 			if(e.getSource() == saveButton )
 			{
+				//Save the current values into colorArray.
 				setTitle("Color Sampler");
 				colorArray[currentColorIndex].red = currentRed;
 				colorArray[currentColorIndex].green = currentGreen;
@@ -378,21 +440,25 @@ public class ColorSampler extends JFrame
 		}
 	}
 
+	/*
+		The ListHandler detects when something in the selection menu is pressed.
+	*/
 	private class ListHandler implements ListSelectionListener
 	{
 		public void valueChanged(ListSelectionEvent e)
 		{
-			if(e.getSource() == colorList)
+			if(e.getSource() == colorList && !e.getValueIsAdjusting())
 			{
-				if(!e.getValueIsAdjusting())
-				{
-					currentColorIndex = colorList.getSelectedIndex();
-					updateRGBValues();
-				}
+				currentColorIndex = colorList.getSelectedIndex();
+				updateRGBValues();
 			}
 		}
 	}
 
+	/*
+		The WindowDestroy class handles the window being closed. First, the method
+			to write to the file is called, then the System.exit(0); command is called.
+	*/
 	private class WindowDestroyer extends WindowAdapter
 	{
 		public void windowClosing(WindowEvent e)

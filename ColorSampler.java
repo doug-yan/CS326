@@ -244,6 +244,10 @@ public class ColorSampler extends JFrame
 						currentBlue += 5;
 						colorTF.setText(String.valueOf(currentBlue));
 					}
+					setTitle("Color Sampler*"); //This is kind of lazy. If a plus is pressed
+						//when the value is already at 255, nothing is going to be changed,
+						//but the title will change anyways. The alternative is to have this 
+						//command copied and pasted in 6 different locations.
 					updateColor();
 				}
 
@@ -266,6 +270,7 @@ public class ColorSampler extends JFrame
 						currentBlue -= 5;
 						colorTF.setText(String.valueOf(currentBlue));
 					}
+					setTitle("Color Sampler*");
 					updateColor();
 				}
 			}
@@ -358,6 +363,7 @@ public class ColorSampler extends JFrame
 
 			if(e.getSource() == saveButton )
 			{
+				setTitle("Color Sampler");
 				colorArray[currentColorIndex].red = currentRed;
 				colorArray[currentColorIndex].green = currentGreen;
 				colorArray[currentColorIndex].blue = currentBlue;

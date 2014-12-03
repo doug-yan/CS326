@@ -18,7 +18,8 @@ public class ColorSampler extends JFrame
 	protected JButton saveButton;
 	protected JButton resetButton;
 	protected JList colorList;
-	protected ColorObject[] colorArray;
+	protected ColorObject[] colorArray = new ColorObject[11];
+	protected ColorObject[] resetArray = new ColorObject[11];
 	protected String[] colors;
 	protected int currentColorIndex;
 	protected int currentRed = 0;
@@ -43,13 +44,13 @@ public class ColorSampler extends JFrame
 		saveButton = new JButton("Save");
 		resetButton = new JButton("Reset");
 		colorList = new JList();
-		colorArray = new ColorObject[11];
 		colors = new String [11];
 		currentColorIndex = 0;
 
 		//TODO: ADD LISTENERS
 		addWindowListener(new WindowDestroyer());
 		saveButton.addActionListener(new ActionHandler());
+		resetButton.addActionListener(new ActionHandler());
 		colorList.addListSelectionListener(new ListHandler());
 
 		//Set up file i/o and put it in the list
@@ -100,9 +101,11 @@ public class ColorSampler extends JFrame
 			tokens.nextToken();
 			cBlue = (int) tokens.nval;
 			colorArray[counter] = new ColorObject(cName, cRed, cGreen, cBlue);
+			resetArray[counter] = new ColorObject(cName, cRed, cGreen, cBlue);
 			counter = counter+1;
 		}
 		stream.close();
+
 	}
 
 	private void setList(ColorObject[] srcArray, String[] destArray)
@@ -290,6 +293,26 @@ public class ColorSampler extends JFrame
 		{
 			return blue;
 		}
+
+		private void setName(String cName)
+		{
+			cName = name;
+		}
+
+		private void setRed(int cRed)
+		{
+			red = cRed;
+		}
+
+		private void setGreen(int cGreen)
+		{
+			green = cGreen;
+		}
+
+		private void setBlue(int cBlue)
+		{
+			blue = cBlue;
+		}
 	}
 
 	private class ActionHandler implements ActionListener
@@ -298,8 +321,13 @@ public class ColorSampler extends JFrame
 		{
 			if(e.getSource() == resetButton)
 			{
-				// setUpList();
-				// current
+				for(int i = 0; i < 11; i++)
+				{
+					colorArray[i].setName(resetArray[i].name);
+					colorArray[i].setRed(resetArray[i].red);
+					colorArray[i].setGreen(resetArray[i].green);
+					colorArray[i].setBlue(resetArray[i].blue);
+				}
 			}
 
 			if(e.getSource() == saveButton )

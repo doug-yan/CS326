@@ -6,8 +6,8 @@ import java.io.*;
 
 /*
 	TODO:
-	Add functionality to the color labels
-	Add functionality to save and reset buttons
+	Write to file on closing
+	Add star when a color is changed
 */
 public class ColorSampler extends JFrame
 {
@@ -47,7 +47,6 @@ public class ColorSampler extends JFrame
 		colors = new String [11];
 		currentColorIndex = 0;
 
-		//TODO: ADD LISTENERS
 		addWindowListener(new WindowDestroyer());
 		saveButton.addActionListener(new ActionHandler());
 		resetButton.addActionListener(new ActionHandler());

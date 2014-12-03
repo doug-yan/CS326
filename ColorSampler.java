@@ -6,8 +6,7 @@ import java.io.*;
 
 /*
 	TODO:
-	Write to file on closing
-	Add star when a color is changed
+	Bug in reset button
 */
 public class ColorSampler extends JFrame
 {
@@ -359,6 +358,14 @@ public class ColorSampler extends JFrame
 					colorArray[i].setGreen(resetArray[i].green);
 					colorArray[i].setBlue(resetArray[i].blue);
 				}
+				setTitle("Color Sampler");
+				currentRed = colorArray[currentColorIndex].red;
+				currentGreen = colorArray[currentColorIndex].green;
+				currentBlue = colorArray[currentColorIndex].blue;
+				redLabel.colorTF.setText(String.valueOf(currentRed));
+				greenLabel.colorTF.setText(String.valueOf(currentGreen));
+				blueLabel.colorTF.setText(String.valueOf(currentBlue));
+				updateColor();
 			}
 
 			if(e.getSource() == saveButton )

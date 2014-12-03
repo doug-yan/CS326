@@ -1,6 +1,7 @@
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
+import javax.swing.event.*;
 import java.io.*;
 
 /*
@@ -48,6 +49,7 @@ public class ColorSampler extends JFrame
 
 		//TODO: ADD LISTENERS
 		addWindowListener(new WindowDestroyer());
+		colorList.addListSelectionListener(new ListHandler());
 
 		//Set up file i/o and put it in the list
 		setUpList();
@@ -144,6 +146,16 @@ public class ColorSampler extends JFrame
 		getContentPane().add(drawTest);
 		drawTest.setBounds(10, 10, 225, 125);
 		setVisible(true);
+	}
+
+	private void updateRGBValues()
+	{
+		ColorObject c = colorArray[currentColorIndex];
+		redLabel.colorTF.setText(String.valueOf(c.red));
+		greenLabel.colorTF.setText(String.valueOf(c.green));
+		blueLabel.colorTF.setText(String.valueOf(c.blue));
+		currentColor = new Color(c.red, c.green, c.blue);
+		drawTest.repaint();
 	}
 
 	private class ColorLabel extends JPanel
@@ -292,6 +304,21 @@ public class ColorSampler extends JFrame
 		public void actionPerformed(ActionEvent e)
 		{
 
+		}
+	}
+
+	private class ListHandler implements ListSelectionListener
+	{
+		public void valueChanged(ListSelectionEvent e)
+		{
+			if(e.getSource() == colorList)
+			{
+				if(!e.getValueIsAdjusting())
+				{
+					currentColorIndex = colorList.getSelectedIndex();
+					updateRGBValues();
+				}
+			}
 		}
 	}
 

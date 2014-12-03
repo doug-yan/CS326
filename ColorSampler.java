@@ -304,7 +304,9 @@ public class ColorSampler extends JFrame
 
 			if(e.getSource() == saveButton )
 			{
-
+				colorArray[currentColorIndex].red = currentRed;
+				colorArray[currentColorIndex].green = currentGreen;
+				colorArray[currentColorIndex].blue = currentBlue;
 			}
 		}
 	}

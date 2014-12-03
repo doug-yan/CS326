@@ -138,14 +138,7 @@ public class ColorSampler extends JFrame
 	private void updateColor()
 	{
 		currentColor = new Color(currentRed, currentGreen, currentBlue, 1);
-	}
-
-	private void updatePaint()
-	{
-		drawTest = new ColorWindow();
-		getContentPane().add(drawTest);
-		drawTest.setBounds(10, 10, 225, 125);
-		setVisible(true);
+		drawTest.repaint();
 	}
 
 	private void updateRGBValues()
@@ -217,10 +210,7 @@ public class ColorSampler extends JFrame
 						currentBlue += 5;
 						colorTF.setText(String.valueOf(currentBlue));
 					}
-					System.out.println(currentColor);
 					updateColor();
-					//drawTest.repaint(10, 10, 225, 125);
-					updatePaint();
 				}
 
 				if(e.getSource() == minusButton)
@@ -242,9 +232,7 @@ public class ColorSampler extends JFrame
 						currentBlue -= 5;
 						colorTF.setText(String.valueOf(currentBlue));
 					}
-					System.out.println(currentColor);
 					updateColor();
-					updatePaint();
 				}
 			}
 		}

@@ -158,6 +158,11 @@ public class ColorSampler extends JFrame
 		drawTest.repaint();
 	}
 
+	private void writeToFile()
+	{
+		
+	}
+
 	private class ColorLabel extends JPanel
 	{	
 		private JLabel colorName;
@@ -357,6 +362,7 @@ public class ColorSampler extends JFrame
 	{
 		public void windowClosing(WindowEvent e)
 		{
+			writeToFile();
 			System.exit(0);
 		}
 	}
